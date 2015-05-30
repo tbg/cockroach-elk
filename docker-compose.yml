@@ -4,16 +4,18 @@ elasticsearch:
     - "9200:9200"
 logstash:
   image: deviantony/elk-logstash
+  stdin_open: true
+#  tty: true
   volumes:
     - logstash-conf:/etc/logstash/conf.d
   ports:
-    - "5000:5000"  
+    - "5000:5000"
   links:
     - elasticsearch
 kibana3:
   image: deviantony/elk-kibana:kibana3
   ports:
-    - "8080:80"
+    - "7999:80"
   links:
     - elasticsearch
 kibana4:
