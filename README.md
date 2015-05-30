@@ -1,16 +1,21 @@
-# Docker ELK stack
+# Docker ELK stack for Cockroach logging
 
-[![Join the chat at https://gitter.im/deviantony/fig-elk](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/deviantony/fig-elk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+A fork with small changes on top of [fig-elk](https://github.com/deviantony/fig-elk)
+for use with [Cockroach](https://github.com/cockroachdb/cockroach).
 
-Run the ELK (Elasticseach, Logstash, Kibana) stack with Docker and Docker-compose.
+Basic usage (with boot2docker, use its IP instead of localhost):
 
-It will give you the ability to quickly test your logstash filters and check how the data can be processed in Kibana.
-
-Based on the 3 following Docker images:
-
-* [elk-elasticsearch](https://github.com/deviantony/docker-elk-elasticsearch)
-* [elk-logstash](https://github.com/deviantony/docker-elk-logstash)
-* [elk-kibana](https://github.com/deviantony/docker-elk-kibana)
+```
+docker-compose up -d
+./cockroach start --logjson [...] 2>&1 | netcat localhost 5000
+# or (if you want to keep the log file)
+./cockroach start --logjson [...] 2>&1 | tee log.log | netcat localhost 5000
+# now use Kibana to look at the logs, on http://localhost:7999.
+# once done,
+docker-compose stop
+# the elasticsearch data is in ./elasticsearch-data, so it is going to
+# be available for the next session.
+```
 
 # HOW TO
 
@@ -61,7 +66,7 @@ The stack exposes 4 ports on your localhost:
 
 * 5000: Logstash TCP input.
 * 9200: Elasticsearch HTTP (with Marvel plugin accessible via [http://localhost:9200/_plugin/marvel](http://localhost:9200/_plugin/marvel))
-* 8080: Kibana 3 web interface, access it via [http://localhost:8080](http://localhost:8080)
+* 7999: Kibana 3 web interface, access it via [http://localhost:7999](http://localhost:8080)
 * 5601: Kibana 4 web interface, access it via [http://localhost:5601](http://localhost:5601)
 
 
@@ -69,5 +74,5 @@ The stack exposes 4 ports on your localhost:
 
 If you're using *boot2docker*, you must access it via the *boot2docker* IP address:
 * http://boot2docker-ip-address:9200/_plugin/marvel to access the Marvel plugin.
-* http://boot2docker-ip-address:8080 to use Kibana 3.
+* http://boot2docker-ip-address:7999 to use Kibana 3.
 * http://boot2docker-ip-address:5601 to use Kibana 4.
