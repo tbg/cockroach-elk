@@ -2,6 +2,8 @@ elasticsearch:
   image: deviantony/elk-elasticsearch
   ports:
     - "9200:9200"
+  volumes:
+    - elasticsearch-data:/usr/share/elasticsearch/data
 logstash:
   image: deviantony/elk-logstash
   stdin_open: true
