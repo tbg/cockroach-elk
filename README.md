@@ -3,7 +3,17 @@
 A fork with small changes on top of [fig-elk](https://github.com/deviantony/fig-elk)
 for use with [Cockroach](https://github.com/cockroachdb/cockroach).
 
-Basic usage (with boot2docker, use its IP instead of localhost):
+## Basic usage
+
+Boot2docker prerequisites:
+```
+boot2docker poweroff
+# map ports to localhost
+for i in 5000 9200 7999 5601; do
+ VBoxManage modifyvm "boot2docker-vm" --natpf1 "tcp-port$i,tcp,,$i,,$i";
+done
+boot2docker up
+```
 
 ```
 docker-compose up -d
